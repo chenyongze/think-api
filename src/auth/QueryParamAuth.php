@@ -12,6 +12,8 @@
 namespace think\api\auth;
 
 
+use think\api\Auth;
+
 class QueryParamAuth extends Auth
 {
 

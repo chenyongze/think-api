@@ -12,6 +12,7 @@
 namespace think\api\auth;
 
 
+use think\api\Auth;
 use think\Response;
 
 class HttpBasicAuth extends Auth

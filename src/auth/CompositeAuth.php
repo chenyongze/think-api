@@ -11,38 +11,31 @@
 
 namespace think\api\auth;
 
-
 use think\api\Auth;
-use think\Request;
 
-class HmacAuth extends Auth
+class CompositeAuth extends Auth
 {
 
     protected $config = [
-        'auth'            => null,
-        'app_id_name'     => 'app_id',
-        'app_secret_name' => 'token',
-        'sign_name'       => 'sign'
+        'auth_methods' => [
+            "think\\api\\auth\\HttpBearerAuth",
+            "think\\api\\auth\\QueryParamAuth"
+        ]
     ];
-
-    protected function verifySign()
-    {
-        //TODO
-        return true;
-    }
-
 
     public function authenticate()
     {
-        $provider = $this->provider;
-
-        $identity = $provider::loginByAccessToken($this->request->param($this->config['app_id_name']));
-
-        if (!$this->verifySign()) {
-            $this->handleFailure();
+        foreach ($this->config['auth_methods'] as $i => $auth) {
+            if (!$auth instanceof Auth) {
+                $this->config['auth_methods'][$i] = $auth = new $auth;
+                if (!$auth instanceof Auth) {
+                    throw new \InvalidArgumentException(get_class($auth) . ' must extends think\\api\\Auth');
+                }
+            }
+            $identity = $auth->authenticate();
+            if ($identity !== null) {
+                return $identity;
+            }
         }
-
-        return $identity;
     }
-
 }

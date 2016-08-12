@@ -8,9 +8,8 @@
 // +----------------------------------------------------------------------
 // | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
-namespace think\api\auth;
+namespace think\api;
 
-use think\api\Authenticatable;
 use think\api\exception\UnauthorizedHttpException;
 use think\Request;
 use think\Response;

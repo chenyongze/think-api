@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace think\api\auth;
 
+use think\api\Auth;
 use think\api\exception\UnauthorizedHttpException;
 use think\Config;
 use think\exception\HttpResponseException;
