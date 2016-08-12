@@ -11,7 +11,6 @@
 
 namespace think\api\auth;
 
-
 use think\api\Auth;
 
 class HttpBearerAuth extends Auth
@@ -20,16 +19,16 @@ class HttpBearerAuth extends Auth
     public function authenticate()
     {
         $authHeader = $this->request->header('Authorization');
-
-        $provider = $this->provider;
+        $identity   = null;
+        $provider   = $this->provider;
         if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
             $identity = $provider::loginByAccessToken($matches[1]);
-
-            if ($identity === null) {
-                $this->handleFailure();
-            }
-            return $identity;
         }
+
+        if ($identity === null) {
+            $this->handleFailure();
+        }
+        return $identity;
     }
 
 }

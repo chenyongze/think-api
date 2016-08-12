@@ -11,7 +11,6 @@
 
 namespace think\api\auth;
 
-
 use think\api\Auth;
 
 class QueryParamAuth extends Auth
@@ -27,11 +26,11 @@ class QueryParamAuth extends Auth
         $provider    = $this->provider;
 
         $identity = $provider::loginByAccessToken($accessToken);
-        if ($identity !== null) {
-            return $identity;
+        if ($identity === null) {
+            $this->handleFailure();
         }
 
-        $this->handleFailure();
+        return $identity;
     }
 
 }
