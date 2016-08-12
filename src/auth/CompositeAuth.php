@@ -12,6 +12,7 @@
 namespace think\api\auth;
 
 use think\api\Auth;
+use think\api\exception\UnauthorizedHttpException;
 
 class CompositeAuth extends Auth
 {
@@ -32,10 +33,12 @@ class CompositeAuth extends Auth
                     throw new \InvalidArgumentException(get_class($auth) . ' must extends think\\api\\Auth');
                 }
             }
-            $identity = $auth->authenticate();
-            if ($identity !== null) {
-                return $identity;
+            try {
+                return $auth->authenticate();
+            } catch (UnauthorizedHttpException $e) {
+
             }
         }
+        $this->handleFailure();
     }
 }
