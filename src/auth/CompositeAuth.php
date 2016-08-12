@@ -27,7 +27,7 @@ class CompositeAuth extends Auth
     {
         foreach ($this->config['auth_methods'] as $i => $auth) {
             if (!$auth instanceof Auth) {
-                $this->config['auth_methods'][$i] = $auth = new $auth;
+                $this->config['auth_methods'][$i] = $auth = new $auth($this->request, $this->provider, $this->config);
                 if (!$auth instanceof Auth) {
                     throw new \InvalidArgumentException(get_class($auth) . ' must extends think\\api\\Auth');
                 }
