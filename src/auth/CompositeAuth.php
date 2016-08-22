@@ -13,6 +13,7 @@ namespace think\api\auth;
 
 use think\api\Auth;
 use think\api\exception\UnauthorizedHttpException;
+use think\Response;
 
 class CompositeAuth extends Auth
 {
@@ -42,7 +43,7 @@ class CompositeAuth extends Auth
         $this->handleFailure();
     }
 
-    public function challenge($response)
+    public function challenge(Response $response)
     {
         foreach ($this->config['auth_methods'] as $method) {
             /** @var $method Auth */
