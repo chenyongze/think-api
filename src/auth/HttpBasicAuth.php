@@ -11,7 +11,6 @@
 
 namespace think\api\auth;
 
-
 use think\api\Auth;
 use think\Response;
 
@@ -20,37 +19,25 @@ class HttpBasicAuth extends Auth
     public $auth;
 
     protected $config = [
-        'realm'    => 'api',
-        'password' => null
+        'realm' => 'api'
     ];
 
     public function authenticate()
     {
-        $username = $this->getAuthUser();
-        $password = $this->getAuthPassword();
         $provider = $this->provider;
 
-        $identity = $provider::loginByAccessToken($username);
+        $token = [
+            'username' => $this->request->server('PHP_AUTH_USER'),
+            'password' => $this->request->server('PHP_AUTH_PW')
+        ];
+
+        $identity = $provider::loginByAccessToken($token);
 
         if ($identity === null) {
             $this->handleFailure();
         }
 
-        if ($this->config['password'] !== null && $identity[$this->config['password']] != $password) {
-            $this->handleFailure();
-        }
-
         return $identity;
-    }
-
-    protected function getAuthUser()
-    {
-        return $this->request->server('PHP_AUTH_USER');
-    }
-
-    protected function getAuthPassword()
-    {
-        return $this->request->server('PHP_AUTH_PW');
     }
 
     public function challenge(Response $response)
