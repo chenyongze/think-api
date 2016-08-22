@@ -41,4 +41,12 @@ class CompositeAuth extends Auth
         }
         $this->handleFailure();
     }
+
+    public function challenge($response)
+    {
+        foreach ($this->config['auth_methods'] as $method) {
+            /** @var $method Auth */
+            $method->challenge($response);
+        }
+    }
 }
